@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koleksi Musik Saya</title>
+<style>
+        /* Mengatur tampilan keseluruhan halaman */
+        body {
+            background-color: #0d1117; /* Warna latar belakang hitam kebiruan yang sangat gelap (Deep Blue Black) */
+            color: #f0f6fc; /* Warna teks putih tulang yang lembut di mata */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font modern dan bersih */
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto; /* Bikin konten web berada di tengah-tengah layar */
+        }
+
+        /* Mengatur tampilan judul utama (H1) */
+/* Mengatur tampilan judul utama (H1) dengan efek gradasi */
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #1a73e8, #9333ea); /* Gradasi Biru ke Ungu */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; /* Bikin teksnya transparan biar warna gradasi di belakangnya kelihatan */
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+        }
+
+        /* Mengatur tampilan judul daftar (H2) */
+        h2 {
+            color: #58a6ff; /* Warna biru muda langit yang cerah */
+        }
+
+        /* Mengatur tampilan deskripsi (P) */
+        p {
+            line-height: 1.6; /* Atur jarak baris agar lebih mudah dibaca */
+            color: #c9d1d9; /* Warna teks abu-abu terang kebiruan */
+        }
+
+        /* Mengatur tampilan daftar lagu */
+        ul {
+            list-style-type: none; /* Menghilangkan titik bullet bawaan */
+            padding: 0;
+        }
+
+        li {
+            background-color: #161b22;
+            margin: 10px 0;
+            padding: 15px 15px 15px 70px; /* Tambah padding kiri agar kaset punya ruang */
+            border-radius: 8px;
+            border-left: 5px solid #1a73e8;
+            transition: 0.3s;
+            position: relative; /* Wajib agar kaset bisa diletakkan di dalam */
+            overflow: hidden; /* Sembunyikan bagian kaset yang keluar kotak */
+            display: flex;
+            align-items: center;
+        }
+
+        /* Modifikasi efek :hover yang lama, kita gabungkan dengan animasi kaset */
+        li:hover {
+            background-color: #1f242c;
+            transform: translateY(-5px) scale(1.02);
+            border-left: 5px solid #58a6ff;
+            box-shadow: 0 0 15px rgba(88, 166, 255, 0.4);
+        }
+        li strong {
+            color: #ffffff; /* Warna judul lagu jadi putih bersih */
+        }
+
+        /* Mengatur tampilan tombol */
+        button {
+            background-color: #1a73e8; /* Tombol warna biru primer */
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-weight: bold;
+            border-radius: 20px; /* Tombol melengkung sempurna */
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+            transition: 0.3s; /* Efek halus pas tombol disentuh */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tambahkan bayangan lembut */
+        }
+
+        /* Efek pas mouse diarahkan ke tombol */
+        button:hover {
+            background-color: #1557b0; /* Biru yang lebih gelap saat disorot */
+            transform: scale(1.05); /* Tombol membesar sedikit */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Bayangan lebih tegas */
+        }
+/* Membuat efek animasi muncul pelan-pelan */
+        @keyframes muncul {
+            from {
+                opacity: 0;
+                transform: translateY(20px); /* Muncul dari bawah */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Memasang animasi ke seluruh isi body */
+        body {
+            animation: muncul 1s ease-out;
+        }
+/* === CSS UNTUK VINYL (PIRINGAN HITAM) === */
+        .vinyl {
+            width: 44px;
+            height: 44px;
+            background: radial-gradient(circle, #222 30%, #000 70%); /* Efek warna piringan hitam */
+            border-radius: 50%; /* Bikin bentuk bulat sempurna */
+            position: absolute;
+            left: 15px; /* Posisikan di sebelah kiri kotak */
+            top: 50%;
+            transform: translateY(-50%) rotate(0deg);
+            transition: transform 0.6s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #333;
+        }
+
+        /* Guratan melingkar khas piringan hitam */
+        .vinyl::before {
+            content: '';
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        /* Label lingkaran di bagian tengah vinyl */
+        .label-tengah {
+            width: 14px;
+            height: 14px;
+            background-color: #1a73e8; /* Warna biru biar serasi sama tema web */
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Lubang kecil di paling tengah piringan hitam */
+        .label-tengah::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: #0d1117; /* Warna lubang tengah (sama dengan background) */
+            border-radius: 50%;
+        }
+
+        /* === KEYFRAMES ANIMASI BERPUTAR === */
+        @keyframes putar-vinyl {
+            from {
+                transform: translateY(-50%) rotate(0deg);
+            }
+            to {
+                transform: translateY(-50%) rotate(360deg); /* Berputar 1 putaran penuh */
+            }
+        }
+
+        /* === AKTIFKAN ANIMASI SAAT KURSOR MENYOROT (HOVER) KOTAK LAGU === */
+        li:hover .vinyl {
+            /* Jalankan animasi 'putar-vinyl' selama 1.5 detik (smooth), terus-menerus */
+            animation: putar-vinyl 1.5s linear infinite;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Playlist Musik Favorit</h1>
+    <p>Selamat datang di ruang musik saya. Ini adalah beberapa lagu yang lagi sering saya dengerin akhir-akhir ini!</p>
+
+    <hr>
+
+<h2>Top 3 Lagu Saat Ini:</h2>
+    <ul>
+        <li>
+            <div class="vinyl">
+                <div class="label-tengah"></div>
+            </div>
+            
+            <div>
+                <strong>Lagu 1:</strong> Judul Lagu Kamu - Nama Penyanyi <br>
+                
+                <audio controls>
+                    <source src="lagu1.mp3" type="audio/mpeg">
+                    Browser kamu tidak mendukung pemutar musik ini.
+                </audio>
+            </div>
+        </li>
+    </ul>    <button>Suka Web Ini?</button>
+<script>
+        // 1. Mencari tombol di dalam halaman web dan menyimpannya ke dalam variabel
+        const tombolSuka = document.querySelector('button');
+
+        // 2. Memberikan "pendengaran" (Event Listener) ke tombol tersebut
+        // Jadi, program bakal nungguin sampai tombolnya di-klik
+        tombolSuka.addEventListener('click', function() {
+            
+            // 3. Aksi yang dilakukan setelah tombol diklik (Memunculkan pop-up alert)
+            alert('Terima kasih banyak! Senang kamu suka dengan website musik biru ini! 💙🎵');
+            
+        });
+    </script>
+</body>
+</html>
