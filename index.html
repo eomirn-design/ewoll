@@ -3,126 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koleksi Musik Saya</title>
-<style>
-        /* Mengatur tampilan keseluruhan halaman */
+    <title>Website Musik Interaktif</title>
+    <style>
+        /* === TEMA DAN BACKGROUND === */
         body {
-            background-color: #0d1117; /* Warna latar belakang hitam kebiruan yang sangat gelap (Deep Blue Black) */
-            color: #f0f6fc; /* Warna teks putih tulang yang lembut di mata */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font modern dan bersih */
-            padding: 40px;
-            max-width: 600px;
-            margin: 0 auto; /* Bikin konten web berada di tengah-tengah layar */
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* Mengatur tampilan judul utama (H1) */
-/* Mengatur tampilan judul utama (H1) dengan efek gradasi */
-        h1 {
-            font-size: 36px;
-            font-weight: 800;
-            background: linear-gradient(45deg, #1a73e8, #9333ea); /* Gradasi Biru ke Ungu */
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent; /* Bikin teksnya transparan biar warna gradasi di belakangnya kelihatan */
-            padding-bottom: 10px;
-            margin-bottom: 5px;
-        }
-
-        /* Mengatur tampilan judul daftar (H2) */
         h2 {
-            color: #58a6ff; /* Warna biru muda langit yang cerah */
+            color: #58a6ff;
+            border-bottom: 2px solid #30363d;
+            padding-bottom: 10px;
+            width: 100%;
+            max-width: 500px;
         }
 
-        /* Mengatur tampilan deskripsi (P) */
-        p {
-            line-height: 1.6; /* Atur jarak baris agar lebih mudah dibaca */
-            color: #c9d1d9; /* Warna teks abu-abu terang kebiruan */
+        /* === AREA INPUT === */
+        .form-tambah {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .form-tambah input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            background-color: #161b22;
+            color: white;
+            font-size: 14px;
         }
 
-        /* Mengatur tampilan daftar lagu */
+        .form-tambah input:focus {
+            outline: none;
+            border-color: #1a73e8;
+        }
+
+        .form-tambah button {
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: none;
+            background-color: #1a73e8;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .form-tambah button:hover {
+            background-color: #58a6ff;
+            transform: scale(1.02);
+        }
+
+        /* === DAFTAR LAGU === */
         ul {
-            list-style-type: none; /* Menghilangkan titik bullet bawaan */
+            list-style: none;
             padding: 0;
+            width: 100%;
+            max-width: 500px;
         }
 
-       li {
+        li {
             background-color: #161b22;
             margin: 15px 0;
-            padding: 15px 15px 15px 80px; /* Jarak kiri agar piringan hitam aman */
+            padding: 15px 15px 15px 80px;
             border-radius: 12px;
             border-left: 5px solid #1a73e8;
             transition: 0.3s;
             position: relative;
             display: flex;
-            align-items: center; /* Merapikan letak konten secara vertikal */
+            align-items: center;
             min-height: 100px;
+            box-sizing: border-box;
         }
-        /* Modifikasi efek :hover yang lama, kita gabungkan dengan animasi kaset */
+
         li:hover {
             background-color: #1f242c;
-            transform: translateY(-5px) scale(1.02);
+            transform: translateY(-3px);
             border-left: 5px solid #58a6ff;
-            box-shadow: 0 0 15px rgba(88, 166, 255, 0.4);
-        }
-        li strong {
-            color: #ffffff; /* Warna judul lagu jadi putih bersih */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        /* Mengatur tampilan tombol */
-        button {
-            background-color: #1a73e8; /* Tombol warna biru primer */
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-weight: bold;
-            border-radius: 20px; /* Tombol melengkung sempurna */
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 16px;
-            transition: 0.3s; /* Efek halus pas tombol disentuh */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tambahkan bayangan lembut */
-        }
-
-        /* Efek pas mouse diarahkan ke tombol */
-        button:hover {
-            background-color: #1557b0; /* Biru yang lebih gelap saat disorot */
-            transform: scale(1.05); /* Tombol membesar sedikit */
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Bayangan lebih tegas */
-        }
-/* Membuat efek animasi muncul pelan-pelan */
-        @keyframes muncul {
-            from {
-                opacity: 0;
-                transform: translateY(20px); /* Muncul dari bawah */
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Memasang animasi ke seluruh isi body */
-        body {
-            animation: muncul 1s ease-out;
-        }
-/* === CSS UNTUK VINYL (PIRINGAN HITAM) === */
+        /* === EFEK VINYL (PIRINGAN HITAM) === */
         .vinyl {
             width: 44px;
             height: 44px;
-            background: radial-gradient(circle, #222 30%, #000 70%); /* Efek warna piringan hitam */
-            border-radius: 50%; /* Bikin bentuk bulat sempurna */
+            background: radial-gradient(circle, #222 30%, #000 70%);
+            border-radius: 50%;
             position: absolute;
-            left: 15px; /* Posisikan di sebelah kiri kotak */
+            left: 15px;
             top: 50%;
             transform: translateY(-50%) rotate(0deg);
-            transition: transform 0.6s ease;
             box-shadow: 0 4px 8px rgba(0,0,0,0.4);
             display: flex;
             align-items: center;
             justify-content: center;
             border: 1px solid #333;
+            pointer-events: none;
         }
 
-        /* Guratan melingkar khas piringan hitam */
         .vinyl::before {
             content: '';
             position: absolute;
@@ -132,190 +121,162 @@
             border-radius: 50%;
         }
 
-        /* Label lingkaran di bagian tengah vinyl */
         .label-tengah {
             width: 14px;
             height: 14px;
-            background-color: #1a73e8; /* Warna biru biar serasi sama tema web */
+            background-color: #1a73e8;
             border-radius: 50%;
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        /* Lubang kecil di paling tengah piringan hitam */
         .label-tengah::after {
             content: '';
             position: absolute;
             width: 4px;
             height: 4px;
-            background-color: #0d1117; /* Warna lubang tengah (sama dengan background) */
+            background-color: #0d1117;
             border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
-        /* === KEYFRAMES ANIMASI BERPUTAR === */
         @keyframes putar-vinyl {
-            from {
-                transform: translateY(-50%) rotate(0deg);
-            }
-            to {
-                transform: translateY(-50%) rotate(360deg); /* Berputar 1 putaran penuh */
-            }
+            from { transform: translateY(-50%) rotate(0deg); }
+            to { transform: translateY(-50%) rotate(360deg); }
         }
 
-        /* === AKTIFKAN ANIMASI SAAT KURSOR MENYOROT (HOVER) KOTAK LAGU === */
         li:hover .vinyl {
-            /* Jalankan animasi 'putar-vinyl' selama 1.5 detik (smooth), terus-menerus */
             animation: putar-vinyl 1.5s linear infinite;
         }
-/* Gaya untuk area input */
-        .form-tambah {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .form-tambah input {
-            flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #30363d;
-            background-color: #161b22;
-            color: white;
-        }
-/* Gaya dasar untuk semua tombol aksi di dalam kotak lagu */
+
+        /* === TOMBOL AKSI === */
         .btn-action {
             display: inline-block;
             text-decoration: none;
-            padding: 6px 12px;
-            font-size: 12px;
+            padding: 5px 10px;
+            font-size: 11px;
             font-weight: bold;
-            border-radius: 12px;
+            border-radius: 8px;
             text-align: center;
             transition: 0.2s;
-            color: black; /* Default teks hitam agar kontras di warna kuning */
         }
 
         .btn-action:hover {
             transform: scale(1.05);
         }
 
-        /* Warna khusus Spotify */
         .btn-spotify {
             background-color: #1DB954;
             color: white !important;
         }
-        .btn-spotify:hover {
-            background-color: #1ed760;
-        }
 
-        /* Warna khusus Genius (Kuning Ikonik) */
         .btn-genius {
             background-color: #fffc44;
-            color: #000000 !important;
+            color: black !important;
         }
-        .btn-genius:hover {
-            background-color: #fffb00;
-        }        }
-/* Gaya awal tombol hapus (tersembunyi secara default) */
+
+        /* === TOMBOL HAPUS === */
         .btn-delete {
-            background: none !important;
-            border: none !important;
+            background: none;
+            border: none;
             font-size: 18px;
             cursor: pointer;
-            padding: 5px !important;
-            margin: 0 !important;
+            padding: 5px;
             position: absolute;
             right: 15px;
             top: 50%;
-            transform: translateY(-50%) scale(1) !important;
-            opacity: 0; /* Bikin transparan/tidak kelihatan */
-            transition: opacity 0.3s ease, transform 0.2s ease !important;
-            box-shadow: none !important;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.2s ease;
         }
 
-        /* Memunculkan tong sampah saat kotak lagu (li) disorot kursor */
         li:hover .btn-delete {
-            opacity: 1; /* Jadi kelihatan jelas */
+            opacity: 1;
         }
 
-        /* Efek saat tombol tong sampah didekati kursor (berubah merah & membesar) */
         .btn-delete:hover {
-            transform: translateY(-50%) scale(1.2) !important;
-            filter: drop-shadow(0 0 5px #ff4d4d); /* Efek menyala merah */
+            transform: translateY(-50%) scale(1.2);
+            filter: drop-shadow(0 0 5px #ff4d4d);
         }
     </style>
 </head>
 <body>
 
-    <h1>Playlist Musik Favorit</h1>
-    <p>Selamat datang di ruang musik saya. Ini adalah beberapa lagu yang lagi sering saya dengerin akhir-akhir ini!</p>
+    <div class="form-tambah">
+        <input type="text" id="inputLagu" placeholder="Ketik Judul Lagu & Penyanyi...">
+        <button id="tombolTambah">Tambah</button>
+    </div>
 
-    <hr>
-<div class="form-tambah">
-        <input type="text" id="inputLagu" placeholder="Ketik Judul Lagu / Penyanyi... (Contoh: Tulus Monokrom)">
-        <button id="tombolTambah">Tambah Lagu</button>
-    </div>            
-            <div>
-                <strong>Lagu 1:</strong> Judul Lagu Kamu - Nama Penyanyi <br>
-                
-                <audio controls>
-                    <source src="lagu1.mp3" type="audio/mpeg">
-                    Browser kamu tidak mendukung pemutar musik ini.
-                </audio>
-            </div>
-        </li>
-    </ul>    <button>Suka Web Ini?</button>
-<script>
+    <h2>Daftar Playlist Kamu:</h2>
+    <ul id="daftarLagu"></ul>
+
+    <script>
         const tombolTambah = document.getElementById('tombolTambah');
         const inputLagu = document.getElementById('inputLagu');
-        const daftarLagu = document.querySelector('ul');
+        const daftarLagu = document.getElementById('daftarLagu');
 
         tombolTambah.addEventListener('click', function() {
             const keywordLagu = inputLagu.value;
 
             if (keywordLagu.trim() === "") {
-                alert("Ketik dulu judul lagu atau nama penyanyinya ya!");
+                alert("Ketik dulu judul lagunya ya!");
                 return;
             }
 
-            // LINK CADANGAN: Menggunakan musik instrumental gratis yang dijamin bebas blokir browser
-            const linkAudioCadangan = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-            const fotoAlbumCadangan = "https://picsum.photos/100"; // Mengambil gambar random estetik dari internet
+            const keywordAman = encodeURIComponent(keywordLagu);
 
-            const teksCari = encodeURIComponent(keywordLagu);
+            // Menghubungi Server iTunes untuk mencari lagu yang akurat
+            fetch(`https://itunes.apple.com/search?term=${keywordAman}&media=music&limit=1`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.results.length === 0) {
+                        alert("Lagu tidak ditemukan, coba kata kunci lain!");
+                        return;
+                    }
 
-            const liBaru = document.createElement('li');
-            liBaru.innerHTML = `
-                <div class="vinyl">
-                    <div class="label-tengah"></div>
-                </div>
-                
-                <img src="${fotoAlbumCadangan}" alt="Cover" style="width: 50px; height: 50px; border-radius: 6px; margin-right: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-                
-                <div style="flex: 1; display: flex; flex-direction: column; gap: 6px; margin-right: 30px;">
-                    <strong style="font-size: 16px; color: #ffffff;">${keywordLagu}</strong>
-                    <span style="font-size: 13px; color: #58a6ff;">Playlist Kamu</span>
-                    
-                    <audio controls src="${linkAudioCadangan}" style="width: 100%; max-width: 220px; height: 25px; margin-top: 5px;"></audio>
-                    
-                    <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px;">
-                        <a href="http://googleusercontent.com/spotify.com/7{teksCari}" target="_blank" class="btn-action btn-spotify" style="font-size: 10px; padding: 4px 8px;">🎵 Spotify</a>
-                        <a href="https://genius.com/search?q=${teksCari}" target="_blank" class="btn-action btn-genius" style="font-size: 10px; padding: 4px 8px;">📄 Genius</a>
-                    </div>
-                </div>
-                
-                <button class="btn-delete" title="Hapus Lagu">🗑️</button>
-            `;
+                    // Ambil data asli dari server internet
+                    const lagu = data.results[0];
+                    const judulAsli = lagu.trackName;
+                    const penyanyiAsli = lagu.artistName;
+                    const coverAsli = lagu.artworkUrl100; // Cover album asli
+                    const fileAudioAsli = lagu.previewUrl; // Potongan musik asli
 
-            const tombolHapus = liBaru.querySelector('.btn-delete');
-            tombolHapus.addEventListener('click', function() {
-                liBaru.remove();
-            });
+                    const teksCari = encodeURIComponent(`${penyanyiAsli} ${judulAsli}`);
 
-            daftarLagu.appendChild(liBaru);
-            inputLagu.value = "";
+                    const liBaru = document.createElement('li');
+                    liBaru.innerHTML = `
+                        <div class="vinyl"><div class="label-tengah"></div></div>
+                        
+                        <img src="${coverAsli}" alt="Cover" style="width: 50px; height: 50px; border-radius: 6px; margin-right: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                        
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 4px; margin-right: 30px;">
+                            <strong style="font-size: 15px; color: #ffffff;">${judulAsli}</strong>
+                            <span style="font-size: 12px; color: #58a6ff;">${penyanyiAsli}</span>
+                            
+                            <audio controls src="${fileAudioAsli}" style="width: 100%; max-width: 200px; height: 24px; margin-top: 4px;"></audio>
+                            
+                            <div style="display: flex; gap: 6px; margin-top: 4px;">
+                                <a href="https://open.spotify.com/track/{teksCari}" target="_blank" class="btn-action btn-spotify">🎵 Spotify</a>
+                                <a href="https://genius.com/search?q=${teksCari}" target="_blank" class="btn-action btn-genius">📄 Genius</a>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-delete" title="Hapus Lagu">🗑️</button>
+                    `;
+
+                    const tombolHapus = liBaru.querySelector('.btn-delete');
+                    tombolHapus.addEventListener('click', function() {
+                        liBaru.remove();
+                    });
+
+                    daftarLagu.appendChild(liBaru);
+                    inputLagu.value = "";
+                })
+                .catch(error => {
+                    console.error("Eror:", error);
+                    alert("Karena dibuka lokal di komputer, browser memblokir pencarian. Yuk, online-kan ke GitHub Pages biar lancar!");
+                });
         });
     </script>
 </body>
