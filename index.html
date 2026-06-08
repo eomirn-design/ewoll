@@ -199,12 +199,64 @@
             transform: translateY(-50%) scale(1.2);
             filter: drop-shadow(0 0 5px #ff4d4d);
         }
+/* Wadah untuk menampung kolom pencarian dan rekomendasi */
+        .pencarian-container {
+            position: relative;
+            flex: 1;
+        }
+
+        /* Gaya untuk kotak rekomendasi yang muncul di bawah input */
+        .kotak-rekomendasi {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 10;
+            margin-top: 5px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            display: none; /* Sembunyikan dulu secara default */
+        }
+
+        /* Gaya untuk setiap baris lagu di dalam rekomendasi */
+        .item-rekomendasi {
+            padding: 10px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #21262d;
+            font-size: 13px;
+            color: #c9d1d9;
+        }
+
+        .item-rekomendasi:last-child {
+            border-bottom: none;
+        }
+
+        .item-rekomendasi:hover {
+            background-color: #1f242c;
+            color: #58a6ff;
+        }
+
+        .item-rekomendasi img {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
 
     <div class="form-tambah">
-        <input type="text" id="inputLagu" placeholder="Ketik Judul Lagu & Penyanyi...">
+        <div class="pencarian-container">
+            <input type="text" id="inputLagu" placeholder="Ketik Artis atau Judul Lagu..." autocomplete="off">
+            <div id="kotakRekomendasi" class="kotak-rekomendasi"></div>
+        </div>
         <button id="tombolTambah">Tambah</button>
     </div>
 
@@ -215,67 +267,109 @@
         const tombolTambah = document.getElementById('tombolTambah');
         const inputLagu = document.getElementById('inputLagu');
         const daftarLagu = document.getElementById('daftarLagu');
+        const kotakRekomendasi = document.getElementById('kotakRekomendasi');
 
-        tombolTambah.addEventListener('click', function() {
-            const keywordLagu = inputLagu.value;
+        // 1. FUNGSI UTAMA: Memasukkan lagu ke playlist
+        function tambahLaguKePlaylist(judul, penyanyi, cover, audio) {
+            const teksCari = encodeURIComponent(`${penyanyi} ${judul}`);
+            const liBaru = document.createElement('li');
+            liBaru.innerHTML = `
+                <div class="vinyl"><div class="label-tengah"></div></div>
+                <img src="${cover}" alt="Cover" style="width: 50px; height: 50px; border-radius: 6px; margin-right: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 4px; margin-right: 30px;">
+                    <strong style="font-size: 15px; color: #ffffff;">${judul}</strong>
+                    <span style="font-size: 12px; color: #58a6ff;">${penyanyi}</span>
+                    <audio controls src="${audio}" style="width: 100%; max-width: 200px; height: 24px; margin-top: 4px;"></audio>
+                    <div style="display: flex; gap: 6px; margin-top: 4px;">
+                        <a href="https://open.spotify.com/search/${teksCari}" target="_blank" class="btn-action btn-spotify">🎵 Spotify</a>
+                        <a href="https://genius.com/search?q=${teksCari}" target="_blank" class="btn-action btn-genius">📄 Genius</a>
+                    </div>
+                </div>
+                <button class="btn-delete" title="Hapus Lagu">🗑️</button>
+            `;
 
-            if (keywordLagu.trim() === "") {
-                alert("Ketik dulu judul lagunya ya!");
+            const tombolHapus = liBaru.querySelector('.btn-delete');
+            tombolHapus.addEventListener('click', function() {
+                liBaru.remove();
+            });
+
+            daftarLagu.appendChild(liBaru);
+            kotakRekomendasi.style.display = 'none'; // Sembunyikan rekomendasi setelah dipilih
+            inputLagu.value = ""; // Kosongkan inputan
+        }
+
+        // 2. FUNGSI OTOMATIS: Memunculkan rekomendasi saat mengetik
+        inputLagu.addEventListener('input', function() {
+            const keyword = inputLagu.value;
+
+            // Jika ketikan masih terlalu pendek (kurang dari 3 huruf), jangan cari dulu
+            if (keyword.trim().length < 3) {
+                kotakRekomendasi.style.display = 'none';
                 return;
             }
 
-            const keywordAman = encodeURIComponent(keywordLagu);
+            const keywordAman = encodeURIComponent(keyword);
 
-            // Menggunakan HTTPS agar tidak diblokir browser
-            fetch(`https://itunes.apple.com/search?term=${keywordAman}&media=music&limit=1`)
+            // Cari hingga 5 lagu paling populer berdasarkan ketikan
+            fetch(`https://itunes.apple.com/search?term=${keywordAman}&media=music&limit=5`)
                 .then(response => response.json())
                 .then(data => {
+                    kotakRekomendasi.innerHTML = ""; // Bersihkan rekomendasi lama
+
                     if (data.results.length === 0) {
-                        alert("Lagu tidak ditemukan, coba kata kunci lain!");
+                        kotakRekomendasi.style.display = 'none';
                         return;
                     }
 
-                    const lagu = data.results[0];
-                    const judulAsli = lagu.trackName;
-                    const penyanyiAsli = lagu.artistName;
-                    const coverAsli = lagu.artworkUrl100; 
-                    const fileAudioAsli = lagu.previewUrl; 
+                    // Tampilkan kotak rekomendasi
+                    kotakRekomendasi.style.display = 'block';
 
-                    const teksCari = encodeURIComponent(`${penyanyiAsli} ${judulAsli}`);
-
-                    const liBaru = document.createElement('li');
-                    liBaru.innerHTML = `
-                        <div class="vinyl"><div class="label-tengah"></div></div>
-                        
-                        <img src="${coverAsli}" alt="Cover" style="width: 50px; height: 50px; border-radius: 6px; margin-right: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-                        
-                        <div style="flex: 1; display: flex; flex-direction: column; gap: 4px; margin-right: 30px;">
-                            <strong style="font-size: 15px; color: #ffffff;">${judulAsli}</strong>
-                            <span style="font-size: 12px; color: #58a6ff;">${penyanyiAsli}</span>
-                            
-                            <audio controls src="${fileAudioAsli}" style="width: 100%; max-width: 200px; height: 24px; margin-top: 4px;"></audio>
-                            
-                            <div style="display: flex; gap: 6px; margin-top: 4px;">
-                                <a href="https://open.spotify.com/search/${teksCari}" target="_blank" class="btn-action btn-spotify">🎵 Spotify</a>
-                                <a href="https://genius.com/search?q=${teksCari}" target="_blank" class="btn-action btn-genius">📄 Genius</a>
+                    // Isi kotak dengan daftar lagu populer hasil pencarian
+                    data.results.forEach(lagu => {
+                        const item = document.createElement('div');
+                        item.className = 'item-rekomendasi';
+                        item.innerHTML = `
+                            <img src="${lagu.artworkUrl100}" alt="Cover">
+                            <div>
+                                <strong style="display:block; color:#fff;">${lagu.trackName}</strong>
+                                <span style="color:#8b949e; font-size:11px;">${lagu.artistName}</span>
                             </div>
-                        </div>
-                        
-                        <button class="btn-delete" title="Hapus Lagu">🗑️</button>
-                    `;
+                        `;
 
-                    const tombolHapus = liBaru.querySelector('.btn-delete');
-                    tombolHapus.addEventListener('click', function() {
-                        liBaru.remove();
+                        // Jika item rekomendasi diklik, langsung masukkan ke playlist
+                        item.addEventListener('click', function() {
+                            tambahLaguKePlaylist(lagu.trackName, lagu.artistName, lagu.artworkUrl100, lagu.previewUrl);
+                        });
+
+                        kotakRekomendasi.appendChild(item);
                     });
-
-                    daftarLagu.appendChild(liBaru);
-                    inputLagu.value = "";
                 })
-                .catch(error => {
-                    console.error("Eror:", error);
-                    alert("Gagal mengambil data. Pastikan koneksi internet stabil.");
+                .catch(err => console.error("Gagal memuat rekomendasi:", err));
+        });
+
+        // Tombol Tambah manual jika user tetap ingin tekan tombol
+        tombolTambah.addEventListener('click', function() {
+            const keywordLagu = inputLagu.value;
+            if (keywordLagu.trim() === "") return;
+
+            const keywordAman = encodeURIComponent(keywordLagu);
+            fetch(`https://itunes.apple.com/search?term=${keywordAman}&media=music&limit=1`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.results.length > 0) {
+                        const lagu = data.results[0];
+                        tambahLaguKePlaylist(lagu.trackName, lagu.artistName, lagu.artworkUrl100, lagu.previewUrl);
+                    } else {
+                        alert("Lagu tidak ditemukan!");
+                    }
                 });
+        });
+
+        // Tutup kotak rekomendasi jika user mengklik di luar area pencarian
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.pencarian-container')) {
+                kotakRekomendasi.style.display = 'none';
+            }
         });
     </script>
 </body>
