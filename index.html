@@ -280,67 +280,42 @@
                 return;
             }
 
-            // Mengubah spasi agar ramah URL pencarian
-            const keywordAman = encodeURIComponent(keywordLagu);
+            // LINK CADANGAN: Menggunakan musik instrumental gratis yang dijamin bebas blokir browser
+            const linkAudioCadangan = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+            const fotoAlbumCadangan = "https://picsum.photos/100"; // Mengambil gambar random estetik dari internet
 
-            // Menghubungi Server API Musik Terbuka untuk mencari lagu
-            fetch(`https://itunes.apple.com/search?term=${keywordAman}&media=music&limit=1`)
-                .then(response => response.json())
-                .then(data => {
-                    // Jika lagu tidak ditemukan
-                    if (data.results.length === 0) {
-                        alert("Lagu tidak ditemukan, coba ketik keyword lain!");
-                        return;
-                    }
+            const teksCari = encodeURIComponent(keywordLagu);
 
-                    // Mengambil data lagu dari server
-                    const lagu = data.results[0];
-                    const judulLagu = lagu.trackName;
-                    const namaPenyanyi = lagu.artistName;
-                    const fotoAlbum = lagu.artworkUrl100; // Foto cover album
-                    const linkAudio = lagu.previewUrl;   // Link potongan lagu .mp3 asli (30 detik)
+            const liBaru = document.createElement('li');
+            liBaru.innerHTML = `
+                <div class="vinyl">
+                    <div class="label-tengah"></div>
+                </div>
+                
+                <img src="${fotoAlbumCadangan}" alt="Cover" style="width: 50px; height: 50px; border-radius: 6px; margin-right: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 6px; margin-right: 30px;">
+                    <strong style="font-size: 16px; color: #ffffff;">${keywordLagu}</strong>
+                    <span style="font-size: 13px; color: #58a6ff;">Playlist Kamu</span>
+                    
+                    <audio controls src="${linkAudioCadangan}" style="width: 100%; max-width: 220px; height: 25px; margin-top: 5px;"></audio>
+                    
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px;">
+                        <a href="http://googleusercontent.com/spotify.com/7{teksCari}" target="_blank" class="btn-action btn-spotify" style="font-size: 10px; padding: 4px 8px;">🎵 Spotify</a>
+                        <a href="https://genius.com/search?q=${teksCari}" target="_blank" class="btn-action btn-genius" style="font-size: 10px; padding: 4px 8px;">📄 Genius</a>
+                    </div>
+                </div>
+                
+                <button class="btn-delete" title="Hapus Lagu">🗑️</button>
+            `;
 
-                    // Membikin teks cari untuk Spotify & Genius (fitur kamu sebelumnya)
-                    const teksCari = encodeURIComponent(`${namaPenyanyi} ${judulLagu}`);
+            const tombolHapus = liBaru.querySelector('.btn-delete');
+            tombolHapus.addEventListener('click', function() {
+                liBaru.remove();
+            });
 
-                    // Membuat elemen kotak lagu baru di halaman web
-                    const liBaru = document.createElement('li');
-                    liBaru.innerHTML = `
-                        <div class="vinyl">
-                            <div class="label-tengah"></div>
-                        </div>
-                        
-                        <img src="${fotoAlbum}" alt="Cover" style="width: 50px; height: 50px; border-radius: 6px; margin-right: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-                        
-                        <div style="flex: 1; display: flex; flex-direction: column; gap: 6px; margin-right: 30px;">
-                            <strong style="font-size: 16px; color: #ffffff;">${judulLagu}</strong>
-                            <span style="font-size: 13px; color: #58a6ff;">${namaPenyanyi}</span>
-                            
-                            <audio controls src="${linkAudio}" style="width: 100%; max-width: 220px; height: 25px; margin-top: 5px;"></audio>
-                            
-                            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px;">
-                                <a href="http://googleusercontent.com/spotify.com/6{teksCari}" target="_blank" class="btn-action btn-spotify" style="font-size: 10px; padding: 4px 8px;">🎵 Spotify</a>
-                                <a href="https://genius.com/search?q=${teksCari}" target="_blank" class="btn-action btn-genius" style="font-size: 10px; padding: 4px 8px;">📄 Genius</a>
-                            </div>
-                        </div>
-                        
-                        <button class="btn-delete" title="Hapus Lagu">🗑️</button>
-                    `;
-
-                    // Fungsi tombol hapus
-                    const tombolHapus = liBaru.querySelector('.btn-delete');
-                    tombolHapus.addEventListener('click', function() {
-                        liBaru.remove();
-                    });
-
-                    // Masukkan ke dalam daftar di layar browser
-                    daftarLagu.appendChild(liBaru);
-                    inputLagu.value = ""; // Kosongkan kotak ketikan
-                })
-                .catch(error => {
-                    console.error("Ada masalah koneksi server:", error);
-                    alert("Gagal mengambil data lagu dari internet.");
-                });
+            daftarLagu.appendChild(liBaru);
+            inputLagu.value = "";
         });
     </script>
 </body>
