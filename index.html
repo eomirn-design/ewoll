@@ -211,7 +211,7 @@
     <h2>Daftar Playlist Kamu:</h2>
     <ul id="daftarLagu"></ul>
 
-    <script>
+<script>
         const tombolTambah = document.getElementById('tombolTambah');
         const inputLagu = document.getElementById('inputLagu');
         const daftarLagu = document.getElementById('daftarLagu');
@@ -226,7 +226,7 @@
 
             const keywordAman = encodeURIComponent(keywordLagu);
 
-            // Menghubungi Server iTunes untuk mencari lagu yang akurat
+            // Menggunakan HTTPS agar tidak diblokir browser
             fetch(`https://itunes.apple.com/search?term=${keywordAman}&media=music&limit=1`)
                 .then(response => response.json())
                 .then(data => {
@@ -235,12 +235,11 @@
                         return;
                     }
 
-                    // Ambil data asli dari server internet
                     const lagu = data.results[0];
                     const judulAsli = lagu.trackName;
                     const penyanyiAsli = lagu.artistName;
-                    const coverAsli = lagu.artworkUrl100; // Cover album asli
-                    const fileAudioAsli = lagu.previewUrl; // Potongan musik asli
+                    const coverAsli = lagu.artworkUrl100; 
+                    const fileAudioAsli = lagu.previewUrl; 
 
                     const teksCari = encodeURIComponent(`${penyanyiAsli} ${judulAsli}`);
 
@@ -257,7 +256,7 @@
                             <audio controls src="${fileAudioAsli}" style="width: 100%; max-width: 200px; height: 24px; margin-top: 4px;"></audio>
                             
                             <div style="display: flex; gap: 6px; margin-top: 4px;">
-                                <a href="https://open.spotify.com/track/{teksCari}" target="_blank" class="btn-action btn-spotify">🎵 Spotify</a>
+                                <a href="https://open.spotify.com/search/${teksCari}" target="_blank" class="btn-action btn-spotify">🎵 Spotify</a>
                                 <a href="https://genius.com/search?q=${teksCari}" target="_blank" class="btn-action btn-genius">📄 Genius</a>
                             </div>
                         </div>
@@ -275,7 +274,7 @@
                 })
                 .catch(error => {
                     console.error("Eror:", error);
-                    alert("Karena dibuka lokal di komputer, browser memblokir pencarian. Yuk, online-kan ke GitHub Pages biar lancar!");
+                    alert("Gagal mengambil data. Pastikan koneksi internet stabil.");
                 });
         });
     </script>
